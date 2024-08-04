@@ -1,15 +1,16 @@
 package com.example.paymentservice.dtos;
 
+import com.example.paymentservice.models.order.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
 @Setter
-@NoArgsConstructor
+@Getter
 @AllArgsConstructor
-public class GeneratePaymentLinkDTO {
+@NoArgsConstructor
+public class SendOrderConfirmation {
     private Long orderId;
-    private double amount;
+    private PaymentStatus paymentStatus;
 }

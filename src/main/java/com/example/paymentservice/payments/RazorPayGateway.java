@@ -1,11 +1,13 @@
 package com.example.paymentservice.payments;
 
+import com.example.paymentservice.models.order.Order;
 import com.razorpay.PaymentLink;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
 @Component()
@@ -19,17 +21,15 @@ public class RazorPayGateway implements PaymentGateway{
     }
 
     @Override
-    public String generatePaymentLink(Long orderId, Long amount) throws RazorpayException {
+    public String generatePaymentLink(Order order, Jwt jwt) throws RazorpayException {
         JSONObject paymentLinkRequest = new JSONObject();
-        paymentLinkRequest.put("amount",amount*100);
+        paymentLinkRequest.put("amount",order.getPrice()*100);
         paymentLinkRequest.put("currency","INR");
         paymentLinkRequest.put("expire_by",1718097305);
-        paymentLinkRequest.put("reference_id",orderId.toString());
+        paymentLinkRequest.put("reference_id",order.getId().toString());
         paymentLinkRequest.put("description","Payment for policy no #23456");
         JSONObject customer = new JSONObject();
-        customer.put("name","+919292202424");
-        customer.put("contact","Phani Kan");
-        customer.put("email","kanaparthiphani0@gmail.com");
+        customer.put("name",order.getUserId());
         paymentLinkRequest.put("customer",customer);
         JSONObject notify = new JSONObject();
         notify.put("sms",true);
